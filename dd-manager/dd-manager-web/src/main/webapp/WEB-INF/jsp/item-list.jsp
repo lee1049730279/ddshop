@@ -24,7 +24,9 @@
             {field: 'ck', checkbox: true},
             {field: 'id', title: '商品编号', width: 100},
             {field: 'title', title: '商品名称', width: 200},
-            {field: 'price', title: '价格', width: 100, align: 'right'}
+            {field: 'sellPoint', title: '商品卖点', width: 200},
+            {field: 'catName', title: '商品类别', width: 200},
+            {field: 'price', title: '价格', width: 100}
         ]]
     });
 </script>
