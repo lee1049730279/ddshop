@@ -13,4 +13,6 @@ public interface ItemService {
 
 //    List<TbItem> itemList();
     Result<TbItemCustom> listItemByPage(Page page);
+
+    int updateItemsByIds(List<Long> ids);
 }

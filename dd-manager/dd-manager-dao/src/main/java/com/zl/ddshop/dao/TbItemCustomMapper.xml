@@ -8,7 +8,8 @@
   </sql>
   <select id="countItems" resultType="_int">
 
-    SELECT COUNT(1) FROM  tb_item;
+    SELECT COUNT(1) FROM  tb_item
+--     where status !=3
   </select>
 
   <select id="listItemsByPage" parameterType="com.zl.ddshop.common.dto.Page" resultType="com.zl.ddshop.pojo.vo.TbItemCustom">
@@ -17,6 +18,7 @@
     FROM tb_item i
     LEFT  JOIN tb_item_cat c
     ON i.cid=c.id
+--   WHERE i.status != 3
     order by i.id DESC
     limit #{offset},#{rows}
   </select>

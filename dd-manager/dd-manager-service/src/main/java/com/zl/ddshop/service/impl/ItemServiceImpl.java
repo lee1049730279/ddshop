@@ -5,6 +5,7 @@ import com.zl.ddshop.common.dto.Result;
 import com.zl.ddshop.dao.TbItemCustomMapper;
 import com.zl.ddshop.dao.TbItemMapper;
 import com.zl.ddshop.pojo.po.TbItem;
+import com.zl.ddshop.pojo.po.TbItemExample;
 import com.zl.ddshop.pojo.vo.TbItemCustom;
 import com.zl.ddshop.service.ItemService;
 import org.slf4j.Logger;
@@ -16,6 +17,8 @@ import java.util.List;
 
 @Service
 public class ItemServiceImpl implements ItemService {
+
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private TbItemMapper itemMapper;
@@ -46,6 +49,15 @@ public class ItemServiceImpl implements ItemService {
 
 
         return result;
+    }
+    @Override
+    public int updateItemsByIds(List<Long> ids) {
+        TbItem record=new TbItem();
+        record.setStatus((byte) 3);
+        TbItemExample example=new TbItemExample();
+        TbItemExample.Criteria criteria=example.createCriteria();
+        criteria.andIdIn(ids);
+        return itemMapper.updateByExampleSelective(record,example);
     }
 //    public List<TbItem> itemList() {
 //        List<TbItem> list = null;
