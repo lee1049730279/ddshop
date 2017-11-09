@@ -1,5 +1,6 @@
 package com.zl.ddshop.service;
 
+import com.zl.ddshop.common.dto.Order;
 import com.zl.ddshop.common.dto.Page;
 import com.zl.ddshop.common.dto.Result;
 import com.zl.ddshop.pojo.po.TbItem;
@@ -12,7 +13,7 @@ public interface ItemService {
     TbItem getById(Long itemId);
 
 //    List<TbItem> itemList();
-    Result<TbItemCustom> listItemByPage(Page page);
+    Result<TbItemCustom> listItemByPage(Page page, Order order);
 
     int updateItemsByIds(List<Long> ids);
 

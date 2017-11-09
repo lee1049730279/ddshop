@@ -1,5 +1,6 @@
 package com.zl.ddshop.service.impl;
 
+import com.zl.ddshop.common.dto.Order;
 import com.zl.ddshop.common.dto.Page;
 import com.zl.ddshop.common.dto.Result;
 import com.zl.ddshop.dao.TbItemCustomMapper;
@@ -13,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -34,13 +37,21 @@ public class ItemServiceImpl implements ItemService {
 //    @Override
 
     @Override
-    public Result<TbItemCustom> listItemByPage(Page page) {
+    public Result<TbItemCustom> listItemByPage(Page page, Order order) {
         Result<TbItemCustom> result = null;
         try {
+            //创建一个map封装前台传递过来的参数
+            Map<String,Object> map=new HashMap<>();
+            map.put("page",page);
+            map.put("order",order);
+            //创建一个响应参数实体类
             result = new Result<>();
+            //对i经行设置（符合条件的总记录数
             int i = tbItemCustomMapper.countItems();
             result.setTotal(i);
-            List<TbItemCustom> tbItemCustoms = tbItemCustomMapper.listItemsByPage(page);
+            //对rows进行设置
+//            List<TbItemCustom> tbItemCustoms = tbItemCustomMapper.listItemsByPage(page,order);
+            List<TbItemCustom> tbItemCustoms = tbItemCustomMapper.listItemsByPage(map);
             result.setRows(tbItemCustoms);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

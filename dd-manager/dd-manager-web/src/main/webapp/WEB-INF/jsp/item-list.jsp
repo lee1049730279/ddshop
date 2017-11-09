@@ -138,6 +138,8 @@
         }
     }]
     $('#dg').datagrid({
+        //允许多列排序
+        multiSort:true,
         //将工具栏添加到数据表格中
         toolbar: toolbar,
         //请求远程服务器上的URL http://localhost:8080/ddshop/items
@@ -160,7 +162,7 @@
             //field title width列属性
             {field: 'ck', checkbox: true},
             {field: 'id', title: '商品编号', width: 100,sortable:true},
-            {field: 'title', title: '商品名称', width: 200},
+            {field: 'title', title: '商品名称', width: 200,sortable:true},
             {field: 'sellPoint', title: '商品卖点', width: 200},
             {field: 'status', title: '状态', width: 200,formatter:function (value) {
                 switch (value) {
@@ -179,7 +181,9 @@
                 }
             }},
             {field: 'catName', title: '商品类别', width: 200},
-            {field: 'price', title: '价格', width: 100},
+            {field: 'price', title: '价格', width: 100,formatter: function(value){
+                return (value/100);
+            }},
             {field: 'created', title: '创建时间', width: 100,formatter: function(value)
             {
                 return moment(value).format('LL');
