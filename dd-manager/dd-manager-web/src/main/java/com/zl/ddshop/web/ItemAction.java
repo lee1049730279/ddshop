@@ -57,12 +57,32 @@ public class ItemAction {
              return  result;
 
     }
+    //批量删除
     @ResponseBody
     @RequestMapping(value = "/items/batch",method = RequestMethod.POST)
-    public int updateItemsByIds(@RequestParam("ids[]") List<Long> ids)
+    public int deleteItemsByIds(@RequestParam("ids[]") List<Long> ids)
     {
 //        System.out.println(ids.size());
 //        return 2;
         return itemService.updateItemsByIds(ids);
     }
+    //批量上架
+    @ResponseBody
+    @RequestMapping(value = "/items/up",method = RequestMethod.POST)
+    public int upItemsByIds(@RequestParam("ids[]") List<Long> ids)
+    {
+//        System.out.println(ids.size());
+//        return 2;
+        return itemService.upItemsByIds(ids);
+    }
+    //批量下架
+    @ResponseBody
+    @RequestMapping(value = "/items/down",method = RequestMethod.POST)
+    public int downItemsByIds(@RequestParam("ids[]") List<Long> ids)
+    {
+//        System.out.println(ids.size());
+//        return 2;
+        return itemService.downItemsByIds(ids);
+    }
+
 }

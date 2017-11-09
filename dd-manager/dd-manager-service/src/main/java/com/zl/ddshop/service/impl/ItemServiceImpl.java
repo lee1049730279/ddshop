@@ -50,6 +50,27 @@ public class ItemServiceImpl implements ItemService {
 
         return result;
     }
+
+    @Override
+    public int downItemsByIds(List<Long> ids) {
+        TbItem record=new TbItem();
+        record.setStatus((byte)2);
+        TbItemExample example=new TbItemExample();
+        TbItemExample.Criteria criteria=example.createCriteria();
+        criteria.andIdIn(ids);
+        return itemMapper.updateByExampleSelective(record,example);
+    }
+
+    @Override
+    public int upItemsByIds(List<Long> ids) {
+        TbItem record=new TbItem();
+        record.setStatus((byte) 1);
+        TbItemExample example=new TbItemExample();
+        TbItemExample.Criteria criteria=example.createCriteria();
+        criteria.andIdIn(ids);
+        return itemMapper.updateByExampleSelective(record,example);
+    }
+
     @Override
     public int updateItemsByIds(List<Long> ids) {
         TbItem record=new TbItem();
