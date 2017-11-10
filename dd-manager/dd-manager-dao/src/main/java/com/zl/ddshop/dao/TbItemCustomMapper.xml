@@ -6,10 +6,23 @@
      i.num, i.barcode, i.image, i.cid, i.status, i.created, i.updated,
      c.name as catName
   </sql>
+
+  <sql id="Where_Clause">
+    <where>
+      i.status!=3
+      <if test="tbItemQuery !=null and tbItemQuery.title!=null and tbItemQuery.title!=''">
+        and i.title like '%${tbItemQuery.title}%'
+      </if>
+      <if test="tbItemQuery !=null and tbItemQuery.status!=null and tbItemQuery.status!=0">
+        and i.status =#{tbItemQuery.status}
+      </if>
+    </where>
+  </sql>
+
   <select id="countItems" resultType="_int">
 
-    SELECT COUNT(1) FROM  tb_item
-    where status !=3
+    SELECT COUNT(1) FROM  tb_item i
+   <include refid="Where_Clause" />
   </select>
 
   <select id="listItemsByPage"  resultType="com.zl.ddshop.pojo.vo.TbItemCustom">
@@ -18,7 +31,7 @@
     FROM tb_item i
     LEFT  JOIN tb_item_cat c
     ON i.cid=c.id
-  WHERE i.status != 3
+    <include refid="Where_Clause" />
     <choose>
       <when test="order!=null and order.sort!=null and order.order!=null and order.orderParams">
          <foreach collection="order.orderParams" item="item" open="order by" close="" separator=",">

@@ -15,7 +15,7 @@ public interface TbItemCustomMapper {
     /**
      * 查询商品表中的所有记录的数量
      */
-    int countItems();
+    int countItems( Map<String,Object> map);
     /**
      * 查询指定页面显示的记录集合
      */

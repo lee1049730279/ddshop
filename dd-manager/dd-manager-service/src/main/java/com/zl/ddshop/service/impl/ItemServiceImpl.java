@@ -8,6 +8,7 @@ import com.zl.ddshop.dao.TbItemMapper;
 import com.zl.ddshop.pojo.po.TbItem;
 import com.zl.ddshop.pojo.po.TbItemExample;
 import com.zl.ddshop.pojo.vo.TbItemCustom;
+import com.zl.ddshop.pojo.vo.TbItemQuery;
 import com.zl.ddshop.service.ItemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,17 +38,18 @@ public class ItemServiceImpl implements ItemService {
 //    @Override
 
     @Override
-    public Result<TbItemCustom> listItemByPage(Page page, Order order) {
+    public Result<TbItemCustom> listItemByPage(Page page, Order order, TbItemQuery tbItemQuery) {
         Result<TbItemCustom> result = null;
         try {
             //创建一个map封装前台传递过来的参数
             Map<String,Object> map=new HashMap<>();
             map.put("page",page);
             map.put("order",order);
+            map.put("tbItemQuery",tbItemQuery);
             //创建一个响应参数实体类
             result = new Result<>();
             //对i经行设置（符合条件的总记录数
-            int i = tbItemCustomMapper.countItems();
+            int i = tbItemCustomMapper.countItems(map);
             result.setTotal(i);
             //对rows进行设置
 //            List<TbItemCustom> tbItemCustoms = tbItemCustomMapper.listItemsByPage(page,order);

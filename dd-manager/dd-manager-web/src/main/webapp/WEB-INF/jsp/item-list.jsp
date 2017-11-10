@@ -1,147 +1,162 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<div id="toolbar">
+    <div style="padding: 5px; background-color: #fff;">
+        <label>商品标题：</label>
+        <input class="easyui-textbox" type="text" id="title">
+        <label>商品状态：</label>
+        <select id="status" class="easyui-combobox">
+            <option value="0">全部</option>
+            <option value="1">正常</option>
+            <option value="2">下架</option>
+        </select>
+        <!--http://www.cnblogs.com/wisdomoon/p/3330856.html-->
+        <!--注意：要加上type="button",默认行为是submit-->
+        <button onclick="searchForm()" type="button" class="easyui-linkbutton">搜索</button>
+        <%--<a onclick="searchForm()" class="easyui-linkbutton">搜索</a>--%>
+    </div>
+    <div>
+        <button onclick="add()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</button>
+        <button onclick="edit()" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</button>
+        <button onclick="remove()" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</button>
+        <button onclick="down()" class="easyui-linkbutton" data-options="iconCls:'icon-down',plain:true">下架</button>
+        <button onclick="up()" class="easyui-linkbutton" data-options="iconCls:'icon-up',plain:true">上架</button>
+    </div>
+</div>
 <table id="dg"></table>
 <script>
+
+    function searchForm() {
+        $('#dg').datagrid('load',{
+           title:$('#title').val(),
+           status:$('#status').combobox('getValue')
+        });
+    }
+    function add() {
+        console.log('add');
+    }
+
+    function edit() {
+        console.log('edit');
+    }
     //添加工具栏
-    var toolbar = [{
-        iconCls: 'icon-add',
-        test: '新增',
-        handler: function () {
-            console.log('add');
+    function  remove() {
+        var selections=$('#dg').datagrid('getSelections');
+        console.log(selections);
+        if(selections.length==0)
+        {
+            $.messager.alert('提示','请至少选中一条记录');
+            return;
         }
-    },{
-        iconCls: 'icon-remove',
-        test: '删除',
-        handler: function () {
-//            console.log('delete');
-            var selections=$('#dg').datagrid('getSelections');
-            console.log(selections);
-            if(selections.length==0)
+        //function(r) 如果用户点击的是"确定"，那么r=true
+        $.messager.confirm('确认','您确定要删除记录吗？',function (r) {
+            if(r)
             {
-                $.messager.alert('提示','请至少选中一条记录');
-                return;
-            }
-            //function(r) 如果用户点击的是"确定"，那么r=true
-            $.messager.confirm('确认','您确定要删除记录吗？',function (r) {
-                if(r)
+
+                //为了存放id的集合
+                var ids=[];
+                //遍历选中的记录，将记录的id存放到js数组中
+                for(var i=0;i<selections.length;i++)
                 {
-
-                    //为了存放id的集合
-                    var ids=[];
-                    //遍历选中的记录，将记录的id存放到js数组中
-                    for(var i=0;i<selections.length;i++)
-                    {
-                        ids.push(selections[i].id);
-                    }
-                    //把ids异步提交到后台
-                    $.post(
-                        //url:请求后台的哪个地址来进行处理，相当于url,String类型
-                        'items/batch',
-                        //data:从前台提交哪些数据给后台处理，相当于data，Object类型
-                        {'ids[]':ids},
-                        //callback:后台处理成功的回调函数，相当于success，function类型
-                        function(data){
-                            $('#dg').datagrid('reload');
-                        },
-                        //dataType:返回的数据类型，如：json，String类型
-                        'json'
-                    );
-
+                    ids.push(selections[i].id);
                 }
-            });
+                //把ids异步提交到后台
+                $.post(
+                    //url:请求后台的哪个地址来进行处理，相当于url,String类型
+                    'items/batch',
+                    //data:从前台提交哪些数据给后台处理，相当于data，Object类型
+                    {'ids[]':ids},
+                    //callback:后台处理成功的回调函数，相当于success，function类型
+                    function(data){
+                        $('#dg').datagrid('reload');
+                    },
+                    //dataType:返回的数据类型，如：json，String类型
+                    'json'
+                );
+
+            }
+        });
+    }
+    function up() {
+        var selections=$('#dg').datagrid('getSelections');
+        console.log(selections);
+        if(selections.length==0)
+        {
+            $.messager.alert('提示','请至少选中一条记录');
+            return;
         }
-    },{
-        iconCls: 'icon-edit',
-        test: '编辑',
-        handler: function () {
-            console.log('edit');
-        }
-    },{
-        iconCls: 'icon-up',
-        test: '上架',
-        handler: function () {
-            var selections=$('#dg').datagrid('getSelections');
-            console.log(selections);
-            if(selections.length==0)
+        //function(r) 如果用户点击的是"确定"，那么r=true
+        $.messager.confirm('确认','您确定要上架吗？',function (r) {
+            if(r)
             {
-                $.messager.alert('提示','请至少选中一条记录');
-                return;
-            }
-            //function(r) 如果用户点击的是"确定"，那么r=true
-            $.messager.confirm('确认','您确定要上架吗？',function (r) {
-                if(r)
+
+                //为了存放id的集合
+                var ids=[];
+                //遍历选中的记录，将记录的id存放到js数组中
+                for(var i=0;i<selections.length;i++)
                 {
-
-                    //为了存放id的集合
-                    var ids=[];
-                    //遍历选中的记录，将记录的id存放到js数组中
-                    for(var i=0;i<selections.length;i++)
-                    {
-                        ids.push(selections[i].id);
-                    }
-                    //把ids异步提交到后台
-                    $.post(
-                        //url:请求后台的哪个地址来进行处理，相当于url,String类型
-                        'items/up',
-                        //data:从前台提交哪些数据给后台处理，相当于data，Object类型
-                        {'ids[]':ids},
-                        //callback:后台处理成功的回调函数，相当于success，function类型
-                        function(data){
-                            $('#dg').datagrid('reload');
-                        },
-                        //dataType:返回的数据类型，如：json，String类型
-                        'json'
-                    );
-
+                    ids.push(selections[i].id);
                 }
-            });
+                //把ids异步提交到后台
+                $.post(
+                    //url:请求后台的哪个地址来进行处理，相当于url,String类型
+                    'items/up',
+                    //data:从前台提交哪些数据给后台处理，相当于data，Object类型
+                    {'ids[]':ids},
+                    //callback:后台处理成功的回调函数，相当于success，function类型
+                    function(data){
+                        $('#dg').datagrid('reload');
+                    },
+                    //dataType:返回的数据类型，如：json，String类型
+                    'json'
+                );
+
+            }
+        });
+    }
+    function  down() {
+        var selections=$('#dg').datagrid('getSelections');
+        console.log(selections);
+        if(selections.length==0)
+        {
+            $.messager.alert('提示','请至少选中一条记录');
+            return;
         }
-    },{
-        iconCls: 'icon-down',
-        test: '下架',
-        handler: function () {
-            var selections=$('#dg').datagrid('getSelections');
-            console.log(selections);
-            if(selections.length==0)
+        //function(r) 如果用户点击的是"确定"，那么r=true
+        $.messager.confirm('确认','您确定要下架吗？',function (r) {
+            if(r)
             {
-                $.messager.alert('提示','请至少选中一条记录');
-                return;
-            }
-            //function(r) 如果用户点击的是"确定"，那么r=true
-            $.messager.confirm('确认','您确定要下架吗？',function (r) {
-                if(r)
+
+                //为了存放id的集合
+                var ids=[];
+                //遍历选中的记录，将记录的id存放到js数组中
+                for(var i=0;i<selections.length;i++)
                 {
-
-                    //为了存放id的集合
-                    var ids=[];
-                    //遍历选中的记录，将记录的id存放到js数组中
-                    for(var i=0;i<selections.length;i++)
-                    {
-                        ids.push(selections[i].id);
-                    }
-                    //把ids异步提交到后台
-                    $.post(
-                        //url:请求后台的哪个地址来进行处理，相当于url,String类型
-                        'items/down',
-                        //data:从前台提交哪些数据给后台处理，相当于data，Object类型
-                        {'ids[]':ids},
-                        //callback:后台处理成功的回调函数，相当于success，function类型
-                        function(data){
-                            $('#dg').datagrid('reload');
-                        },
-                        //dataType:返回的数据类型，如：json，String类型
-                        'json'
-                    );
-
+                    ids.push(selections[i].id);
                 }
-            });
-        }
-    }]
+                //把ids异步提交到后台
+                $.post(
+                    //url:请求后台的哪个地址来进行处理，相当于url,String类型
+                    'items/down',
+                    //data:从前台提交哪些数据给后台处理，相当于data，Object类型
+                    {'ids[]':ids},
+                    //callback:后台处理成功的回调函数，相当于success，function类型
+                    function(data){
+                        $('#dg').datagrid('reload');
+                    },
+                    //dataType:返回的数据类型，如：json，String类型
+                    'json'
+                );
+
+            }
+        });
+    }
+
     $('#dg').datagrid({
         //允许多列排序
         multiSort:true,
         //将工具栏添加到数据表格中
-        toolbar: toolbar,
+        toolbar: '#toolbar',
         //请求远程服务器上的URL http://localhost:8080/ddshop/items
         url: 'items',
         //隔行变色，斑马线效果
@@ -152,7 +167,6 @@
         rownumbers: true,
         //使得数据表格自适应填充父容器
         fit: true,
-        toolbar: toolbar,
         //默认显示10条，这样的话就显示20条
         pageSize: 20,
         //分页列表
