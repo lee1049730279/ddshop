@@ -195,9 +195,7 @@
                 }
             }},
             {field: 'catName', title: '商品类别', width: 200},
-            {field: 'price', title: '价格', width: 100,formatter: function(value){
-                return (value/100);
-            }},
+            {field: 'priceView', title: '价格', width: 100},
             {field: 'created', title: '创建时间', width: 100,formatter: function(value)
             {
                 return moment(value).format('LL');
