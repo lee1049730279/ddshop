@@ -87,4 +87,20 @@ public class ItemAction {
         return itemService.downItemsByIds(ids);
     }
 
+    //添加商品
+    @ResponseBody
+    @RequestMapping("/item/add")
+    public  int saveItem(TbItem tbItem,String content){
+       int i=0;
+        try {
+                i=itemService.saveItem(tbItem,content);
+        }catch (Exception e)
+        {
+            logger.error(e.getMessage(),e);
+            e.printStackTrace();
+        }
+        return  i;
+
+    }
+
 }
