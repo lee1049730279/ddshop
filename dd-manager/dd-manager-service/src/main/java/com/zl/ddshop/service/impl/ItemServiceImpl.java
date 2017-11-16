@@ -7,9 +7,11 @@ import com.zl.ddshop.common.util.IDUtils;
 import com.zl.ddshop.dao.TbItemCustomMapper;
 import com.zl.ddshop.dao.TbItemDescMapper;
 import com.zl.ddshop.dao.TbItemMapper;
+import com.zl.ddshop.dao.TbItemParamItemMapper;
 import com.zl.ddshop.pojo.po.TbItem;
 import com.zl.ddshop.pojo.po.TbItemDesc;
 import com.zl.ddshop.pojo.po.TbItemExample;
+import com.zl.ddshop.pojo.po.TbItemParamItem;
 import com.zl.ddshop.pojo.vo.TbItemCustom;
 import com.zl.ddshop.pojo.vo.TbItemQuery;
 import com.zl.ddshop.service.ItemService;
@@ -35,6 +37,9 @@ public class ItemServiceImpl implements ItemService {
     private TbItemCustomMapper tbItemCustomMapper;
     @Autowired
     private TbItemDescMapper tbItemDescMapper;
+
+    @Autowired
+    private TbItemParamItemMapper tbItemParamItemMapper;
 
     @Override
     public TbItem getById(Long itemId) {
@@ -115,7 +120,7 @@ public class ItemServiceImpl implements ItemService {
     //加上注解@Trabsactional之后，这个方法就变成了事务方法
     @Transactional
     @Override
-    public int saveItem(TbItem tbItem, String content) {
+    public int saveItem(TbItem tbItem, String content,String paramData) {
         int i=0;
         try {
           //这个方法处理2张表格，tb_item，tb_item_desc
@@ -124,7 +129,7 @@ public class ItemServiceImpl implements ItemService {
             tbItem.setStatus((byte)2);
             tbItem.setCreated(new Date());
             tbItem.setUpdated(new Date());
-            i=itemMapper.insert(tbItem);
+            i+=itemMapper.insert(tbItem);
 
             //处理tb_item_desc
             TbItemDesc tbItemDesc=new TbItemDesc();
@@ -132,7 +137,14 @@ public class ItemServiceImpl implements ItemService {
             tbItemDesc.setItemDesc(content);
             tbItemDesc.setCreated(new Date());
             tbItemDesc.setUpdated(new Date());
-            tbItemDescMapper.insert(tbItemDesc);
+            i+=tbItemDescMapper.insert(tbItemDesc);
+            //处理tb_item_param_item
+            TbItemParamItem tbItemParamItem = new TbItemParamItem();
+            tbItemParamItem.setItemId(itemId);
+            tbItemParamItem.setParamData(paramData);
+            tbItemParamItem.setCreated(new Date());
+            tbItemParamItem.setUpdated(new Date());
+            i += tbItemParamItemMapper.insert(tbItemParamItem);
         }catch (Exception e)
         {
             logger.error(e.getMessage(),e);

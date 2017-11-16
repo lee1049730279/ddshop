@@ -2,6 +2,7 @@ package com.zl.ddshop.service;
 
 import com.zl.ddshop.common.dto.Page;
 import com.zl.ddshop.common.dto.Result;
+import com.zl.ddshop.pojo.po.TbItemParam;
 import com.zl.ddshop.pojo.vo.TbItemParamCustom;
 
 public interface ItemParamService {
@@ -11,4 +12,6 @@ public interface ItemParamService {
      * @return
      */
     Result<TbItemParamCustom> listItemParamsByPage(Page page);
+
+    TbItemParam getItemParamByCid(Long cid);
 }
