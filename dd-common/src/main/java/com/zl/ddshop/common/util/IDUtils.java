@@ -2,7 +2,12 @@ package com.zl.ddshop.common.util;
 
 import java.util.Random;
 
-
+/**
+ * User: DHC
+ * Date: 2017/9/6
+ * Time: 22:03
+ * Version:V1.0
+ */
 public class IDUtils {
 
 

@@ -130,9 +130,10 @@
     }
     //实例化编辑器
     UE.delEditor('container');
-    var ue = UE.getEditor('container',{
+    var ue = UE.getEditor('container', {
         initialFrameWidth: '100%',
-        initialFrameHeight: '400'
+        initialFrameHeight: '300',
+        serverUrl:'file/upload'
     });
     $('#cid').combotree({
         url:'itemCats?parentId=0',

@@ -8,7 +8,10 @@ import org.apache.commons.net.ftp.FTPReply;
 import java.io.*;
 
 /**
- * ftp上传下载工具类
+ * User: DHC
+ * Date: 2017/9/12
+ * Time: 10:04
+ * Version:V1.0
  */
 public class FtpUtils {
 
@@ -30,6 +33,9 @@ public class FtpUtils {
         FTPClient ftp = new FTPClient();
         try {
             int reply;
+            //解决storeFile上传成功但是返回false问题
+            ftp.enterLocalPassiveMode();
+            ftp.setControlEncoding("UTF-8");
             ftp.connect(host, port);// 连接FTP服务器
             // 如果采用默认端口，可以使用ftp.connect(host)的方式直接连接FTP服务器
             ftp.login(username, password);// 登录
@@ -57,8 +63,8 @@ public class FtpUtils {
             }
             //设置上传文件的类型为二进制类型
             ftp.setFileType(FTP.BINARY_FILE_TYPE);
-            //上传文件
-            if (!ftp.storeFile(filename, input)) {
+            //上传文件，解决了中文乱码问题
+            if (!ftp.storeFile(new String(filename.getBytes("UTF-8"),"ISO-8859-1"), input)) {
                 return result;
             }
             input.close();
@@ -128,5 +134,4 @@ public class FtpUtils {
         }
         return result;
     }
-
 }
